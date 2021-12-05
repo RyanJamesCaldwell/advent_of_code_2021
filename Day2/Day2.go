@@ -16,58 +16,57 @@ func Solve() {
 	absolutePath, _ := filepath.Abs("./Day2/input.txt")
 	strDataSlice := strings.Split(f.ReadFile(absolutePath), "\n")
 
-  fmt.Println("Part 1 Solution:", part1(strDataSlice))
-  fmt.Println("Part 2 Solution:", part2(strDataSlice))
+	fmt.Println("Part 1 Solution:", part1(strDataSlice))
+	fmt.Println("Part 2 Solution:", part2(strDataSlice))
 }
 
 func part1(data []string) int {
-  depth, horizontalPosition := 0, 0
+	depth, horizontalPosition := 0, 0
 
-  for _, line := range data {
-    if len(line) == 0 {
-      continue
-    }
+	for _, line := range data {
+		if len(line) == 0 {
+			continue
+		}
 
-    lineSlice := strings.Split(line, " ")
-    command := lineSlice[0]
-    distance, _ := strconv.Atoi(lineSlice[1])
+		lineSlice := strings.Split(line, " ")
+		command := lineSlice[0]
+		distance, _ := strconv.Atoi(lineSlice[1])
 
-    switch command {
-    case "forward":
-      horizontalPosition += distance
-    case "up":
-      depth -= distance
-    case "down":
-      depth += distance
-    }
-  }
+		switch command {
+		case "forward":
+			horizontalPosition += distance
+		case "up":
+			depth -= distance
+		case "down":
+			depth += distance
+		}
+	}
 
-  return depth * horizontalPosition
+	return depth * horizontalPosition
 }
 
 func part2(data []string) int {
-  depth, horizontalPosition, aim := 0, 0, 0
+	depth, horizontalPosition, aim := 0, 0, 0
 
-  for _, line:= range data {
-    if len(line) == 0 {
-      continue
-    }
+	for _, line := range data {
+		if len(line) == 0 {
+			continue
+		}
 
-    lineSlice := strings.Split(line, " ")
-    command := lineSlice[0]
-    distance, _ := strconv.Atoi(lineSlice[1])
+		lineSlice := strings.Split(line, " ")
+		command := lineSlice[0]
+		distance, _ := strconv.Atoi(lineSlice[1])
 
-    switch command {
-    case "forward":
-      horizontalPosition += distance
-      depth += (aim * distance)
-    case "up":
-      aim -= distance
-    case "down":
-      aim += distance
-    }
-  }
+		switch command {
+		case "forward":
+			horizontalPosition += distance
+			depth += (aim * distance)
+		case "up":
+			aim -= distance
+		case "down":
+			aim += distance
+		}
+	}
 
-  return depth * horizontalPosition
+	return depth * horizontalPosition
 }
-

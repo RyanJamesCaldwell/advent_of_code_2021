@@ -1,0 +1,78 @@
+package Day3
+
+import (
+	f "adventOfCode/fileReader"
+	"fmt"
+	"path/filepath"
+	"strconv"
+	"strings"
+)
+
+func Header() {
+	fmt.Println("AoC Day3 Puzzle Solution")
+}
+
+func Solve() {
+	absolutePath, _ := filepath.Abs("./Day3/sample_input.txt")
+	strDataSlice := strings.Split(f.ReadFile(absolutePath), "\n")
+
+  fmt.Println("Part 1 Solution:", part1(strDataSlice))
+  fmt.Println("Part 2 Solution:", part2(strDataSlice))
+}
+
+func part1(data []string) int {
+  gammaRate, epsilonRate := gammaRate(data), epsilonRate(data)
+
+  return gammaRate * epsilonRate
+}
+
+func gammaRate(data[]string) int  {
+  bitCountByColumn := make([]map[string]int, 5)
+
+  for _, row := range data {
+    for colIdx, colValue := range strings.Split(row, "") {
+      if bitCountByColumn[colIdx] == nil {
+        bitCountByColumn[colIdx] = map[string]int{"0": 0, "1": 0}
+      }
+
+      bitCountByColumn[colIdx][colValue] += 1
+    }
+  }
+
+  gammaRateMap := make([]int, 5)
+
+  fmt.Println(bitCountByColumn)
+
+  for idx, colMap := range bitCountByColumn {
+    if colMap["0"] > colMap["1"] {
+      gammaRateMap[idx] = 0
+    } else {
+      gammaRateMap[idx] = 1
+    }
+  }
+
+  fmt.Println("gammaRateMap", gammaRateMap, "decimal", intSliceToDecimal(gammaRateMap))
+
+  return 0
+}
+
+func epsilonRate(data[]string) int {
+  return 0
+}
+
+func intSliceToDecimal(intSlice []int) string {
+  str := []string{}
+  for _, val := range intSlice {
+    str = append(str, strconv.Itoa(val))
+  }
+  builtStr := strings.Join(builtStr, "")
+
+  binaryInt, _ := strconv.ParseInt(builtStr, 2, 64)
+
+  return binaryInt
+}
+
+func part2(data []string) int {
+  return 0
+}
+
