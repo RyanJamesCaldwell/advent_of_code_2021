@@ -27,6 +27,8 @@ func part1(data []string) int {
   fmt.Println("Drawn numbers:", drawnNumbers)
   fmt.Println("Boards:", boards)
 
+  printBoard(boards[0])
+
   return 0
 }
 
@@ -34,15 +36,30 @@ func part2(data []string) int {
   return 0
 }
 
-func buildBoardsFromRawBoardData(rawBoardData []string) [][][]int {
-  var boards [][][]int
+func printBoard(board [][]map[string]int) {
+  fmt.Println("Board")
+  fmt.Println("==========")
+
+  for _, rowValue := range board {
+    rowSlice := []string{}
+
+    for _, col := range rowValue {
+      str := strconv.Itoa(col["value"])
+      rowSlice = append(rowSlice, str)
+    }
+
+    fmt.Println(strings.Join(rowSlice, ", "))
+  }
+}
+
+func buildBoardsFromRawBoardData(rawBoardData []string) [][][]map[string]int {
+  var boards [][][]map[string]int
 
   for i := 0; i < len(rawBoardData) - 1; i += 5 {
     if len(rawBoardData[i]) == 0 {
       i++
     }
     board := buildBoard(rawBoardData[i:i+5])
-    //fmt.Println("Board", board)
     boards = append(boards, board)
   }
 
@@ -61,20 +78,24 @@ func buildDrawnNumbers(input []string) []int {
   return intInputSlice
 }
 
-func buildBoard(input []string) [][]int {
-  result := make([][]int, 5)
+func buildBoard(input []string) [][]map[string]int {
+  result := make([][]map[string]int, 5)
 
   for i := 0; i < 5; i++ {
-    result[i] = make([]int, 5)
+    result[i] = make([]map[string]int, 5)
   }
 
   for rowIdx, rowValue := range input {
     fixedRow := strings.TrimSpace(strings.Replace(rowValue, "  ", " ", -1))
 
     for colIdx, colValue := range strings.Split(fixedRow, " ") {
+      boardPositionMap := make(map[string]int)
       intValue, _ := strconv.Atoi(colValue)
 
-      result[rowIdx][colIdx] = intValue
+      boardPositionMap["value"] = intValue
+      boardPositionMap["occupied"] = 0
+
+      result[rowIdx][colIdx] = boardPositionMap
     }
   }
 
