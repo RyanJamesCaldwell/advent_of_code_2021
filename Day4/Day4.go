@@ -4,6 +4,7 @@ import (
 	f "adventOfCode/fileReader"
 	"fmt"
 	"path/filepath"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -52,7 +53,61 @@ out:
 }
 
 func part2(data []string) int {
-	return 0
+	drawnNumbers := buildDrawnNumbers(data)
+	boards := buildBoardsFromRawBoardData(data[2:])
+	var winningBoards [][][]map[string]int
+	var numbersCausingWins []int
+
+	for _, currentNumber := range drawnNumbers {
+		for boardIdx, _ := range boards {
+			if boardIdx >= len(boards) {
+				continue
+			}
+
+			currentBoard := boards[boardIdx]
+
+			if boardAlreadyWon(winningBoards, currentBoard) {
+				continue
+			}
+
+			for rowIdx, rowVal := range currentBoard {
+				for colIdx, _ := range rowVal {
+					if currentBoard[rowIdx][colIdx]["value"] == currentNumber {
+						currentBoard[rowIdx][colIdx]["marked"] = 1
+
+						if boardIsWinner(currentBoard) {
+							winningBoards = append(winningBoards, currentBoard)
+							numbersCausingWins = append(numbersCausingWins, currentNumber)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	lastBoardToWin := winningBoards[len(winningBoards)-1]
+	winningNumberForLastBoardToWin := numbersCausingWins[len(numbersCausingWins)-1]
+
+	sumUnmarkedNumbers := sumOfUnmarkedNumbers(lastBoardToWin)
+
+	return sumUnmarkedNumbers * winningNumberForLastBoardToWin
+}
+
+func boardAlreadyWon(winningBoards [][][]map[string]int, board [][]map[string]int) bool {
+	boardAlreadyWon := false
+
+	for _, winnerBoard := range winningBoards {
+		if reflect.DeepEqual(winnerBoard, board) == true {
+			boardAlreadyWon = true
+			break
+		}
+	}
+
+	return boardAlreadyWon
+}
+
+func removeBoardFromBoardsSlice(boards [][][]map[string]int, index int) [][][]map[string]int {
+	return append(boards[:index], boards[index+1:]...)
 }
 
 func sumOfUnmarkedNumbers(board [][]map[string]int) int {
@@ -133,7 +188,7 @@ func printBoard(board [][]map[string]int) {
 		rowSlice := []string{}
 
 		for _, col := range rowValue {
-			str := strconv.Itoa(col["value"])
+			str := strconv.Itoa(col["value"]) + "(" + strconv.Itoa(col["marked"]) + ")"
 			rowSlice = append(rowSlice, str)
 		}
 
