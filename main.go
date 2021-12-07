@@ -1,7 +1,7 @@
 package main
 
 import (
-	puzzle "adventOfCode/Day4"
+	puzzle "adventOfCode/Day5"
 )
 
 func main() {
