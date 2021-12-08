@@ -22,7 +22,9 @@ func Solve() {
   emptyDiagram := makeEmptyDiagram(width, height)
 
 	fmt.Println("Part 1 Solution:", part1(builtLines, emptyDiagram))
-	fmt.Println("Part 2 Solution:", part2(builtLines, emptyDiagram))
+
+  newEmpty := makeEmptyDiagram(width, height)
+	fmt.Println("Part 2 Solution:", part2(builtLines, newEmpty))
 }
 
 // types
@@ -41,17 +43,23 @@ func part1(lines []Line, diagram [][]int) int {
       diagram = plotHorizontalLine(line, diagram)
     } else if isVerticalLine(line) {
       diagram = plotVerticalLine(line, diagram)
-    } else {
-      fmt.Println("line is diagonal", line)
     }
   }
-  printDiagram(diagram)
   return getNumPointsGreaterThanTwo(diagram)
 }
 
 // part 2
 func part2(lines []Line, diagram [][]int) int {
-  return 0
+  for _, line := range lines {
+    if isHorizontalLine(line) {
+      diagram = plotHorizontalLine(line, diagram)
+    } else if isVerticalLine(line) {
+      diagram = plotVerticalLine(line, diagram)
+    } else if isDiagonalLine(line) {
+      diagram = plotDiagonalLine(line, diagram)
+    }
+  }
+  return getNumPointsGreaterThanTwo(diagram)
 }
 
 func getNumPointsGreaterThanTwo(diagram [][]int) int {
@@ -66,6 +74,33 @@ func getNumPointsGreaterThanTwo(diagram [][]int) int {
   }
 
   return count
+}
+
+func plotDiagonalLine(line Line, diagram [][]int) [][]int {
+  xIncrease, yIncrease := 0, 0
+
+  if line.Start.X < line.End.X {
+    xIncrease = 1
+  } else {
+    xIncrease = -1
+  }
+
+  if line.Start.Y < line.End.Y {
+    yIncrease = 1
+  } else {
+    yIncrease = -1
+  }
+
+  var x int
+  var y int
+
+  for x, y = line.Start.X, line.Start.Y; x != line.End.X; x, y = x + xIncrease, y + yIncrease {
+    diagram[y][x] += 1
+  }
+
+  diagram[y][x] += 1
+
+  return diagram
 }
 
 func plotHorizontalLine(line Line, diagram [][]int) [][]int {
@@ -125,6 +160,11 @@ func isVerticalLine(line Line) bool {
   return false
 }
 
+func isDiagonalLine(line Line) bool {
+  result := line.Start.X != line.End.X && line.Start.Y != line.End.Y
+  return result
+}
+
 func printDiagram(diagram [][]int) {
   for _, rowVal := range diagram {
     fmt.Println(rowVal)
@@ -137,8 +177,6 @@ func makeEmptyDiagram(width int, height int) [][]int {
   for i := 0; i < height; i++ {
     emptyDiagram = append(emptyDiagram, make([]int, width))
   }
-
-  printDiagram(emptyDiagram)
 
   return emptyDiagram
 }
