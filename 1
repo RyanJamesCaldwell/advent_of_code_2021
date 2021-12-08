@@ -13,10 +13,10 @@ func Header() {
 }
 
 func Solve() {
-	absolutePath, _ := filepath.Abs("./Day3/input.txt")
+	absolutePath, _ := filepath.Abs("./Day3/sample_input.txt")
 	strDataSlice := strings.Split(f.ReadFile(absolutePath), "\n")
 
-	//fmt.Println("Part 1 Solution:", part1(strDataSlice))
+	fmt.Println("Part 1 Solution:", part1(strDataSlice))
 	fmt.Println("Part 2 Solution:", part2(strDataSlice))
 }
 
@@ -27,15 +27,8 @@ func part1(data []string) int {
 }
 
 func part2(data []string) int {
-  dataCopy := make([]string, len(data))
-
-  for rowIdx, rowValue := range data {
-    dataCopy[rowIdx] = rowValue
-  }
-
   oxygenGeneratorRating := oxygenGeneratorRating(data)
-
-  co2ScrubberRating := co2ScrubberRating(dataCopy)
+  co2ScrubberRating := co2ScrubberRating(data)
 
 	return oxygenGeneratorRating * co2ScrubberRating
 }
@@ -51,7 +44,7 @@ func co2ScrubberRating(data []string) int {
   fmt.Println("Starting data", data)
 
   var result string
-  for i := 0; i < 12; i++ {
+  for i := 0; i < 5; i++ {
     fmt.Println("next column iter")
     bitCountByColumn := calculateBitCountByColumn(data)
     //column has all 1 bits, the 1's are getting removed
@@ -87,7 +80,7 @@ func co2ScrubberRating(data []string) int {
 
   fmt.Println("Result", result)
 
-  oxygenIntSlice := make([]int, 12) //12
+  oxygenIntSlice := make([]int, 5) //12
   for idx, _ := range result {
     intVal, _ := strconv.Atoi(string(result[idx]))
     oxygenIntSlice[idx] = intVal
@@ -106,7 +99,7 @@ func oxygenGeneratorRating(data []string) int {
     }
   }
   var result string
-  for i := 0; i < 12; i++ {
+  for i := 0; i < 5; i++ {
     bitCountByColumn := calculateBitCountByColumn(data)
     if bitCountByColumn[i]["0"] > bitCountByColumn[i]["1"] {
       //remove all 1's
@@ -133,7 +126,7 @@ func oxygenGeneratorRating(data []string) int {
     }
 	}
 
-  oxygenIntSlice := make([]int, 12) //12
+  oxygenIntSlice := make([]int, 5) //12
   for idx, _ := range result {
     intVal, _ := strconv.Atoi(string(result[idx]))
     oxygenIntSlice[idx] = intVal
@@ -145,7 +138,7 @@ func oxygenGeneratorRating(data []string) int {
 }
 
 func calculateBitCountByColumn(data []string) []map[string]int {
-	bitCountByColumn := make([]map[string]int, 12) //12
+	bitCountByColumn := make([]map[string]int, 5) //12
 
 	for _, row := range data {
 		for colIdx, colValue := range strings.Split(row, "") {
