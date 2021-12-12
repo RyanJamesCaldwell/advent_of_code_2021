@@ -3,8 +3,8 @@ package Day6
 import (
 	f "adventOfCode/fileReader"
 	"fmt"
-  "path/filepath"
-  "strconv"
+	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -14,7 +14,7 @@ func Header() {
 
 func Solve() {
 	absolutePath, _ := filepath.Abs("./Day6/input.txt")
-  //absolutePath, _ := filepath.Abs("./Day6/sample_input.txt")
+	//absolutePath, _ := filepath.Abs("./Day6/sample_input.txt")
 	strDataSlice := strings.Split(f.ReadFile(absolutePath), ",")
 	fishSlice := stringSliceToFishSlice(strDataSlice)
 	intSlice := stringSliceToIntSlice(strDataSlice)
@@ -101,7 +101,6 @@ func newFish() Fish {
 
 	return newFish
 }
-
 
 func stringSliceToFishSlice(strSlice []string) []Fish {
 	fishSlice := make([]Fish, len(strSlice))
