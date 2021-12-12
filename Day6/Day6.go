@@ -13,12 +13,14 @@ func Header() {
 }
 
 func Solve() {
-	//absolutePath, _ := filepath.Abs("./Day6/input.txt")
-  absolutePath, _ := filepath.Abs("./Day6/sample_input.txt")
+	absolutePath, _ := filepath.Abs("./Day6/input.txt")
+  //absolutePath, _ := filepath.Abs("./Day6/sample_input.txt")
 	strDataSlice := strings.Split(f.ReadFile(absolutePath), ",")
 	fishSlice := stringSliceToFishSlice(strDataSlice)
+	intSlice := stringSliceToIntSlice(strDataSlice)
 
 	fmt.Println("Part 1 solution:", part1(fishSlice, 80))
+	fmt.Println("Part 2 solution:", part2(intSlice, 256))
 }
 
 type Fish struct {
@@ -45,6 +47,43 @@ func part1(fishSlice []Fish, numDays int) int {
 	}
 
 	return len(fishSlice)
+}
+
+// sample answer: 26984457539
+func part2(intSlice []int, numDays int) int {
+	for currentDay := 0; currentDay < numDays; currentDay++ {
+		newFishCounts := make([]int, 9)
+
+		for idx, count := range intSlice {
+			if idx == 0 {
+				newFishCounts[6] += count
+				newFishCounts[8] += count
+			} else {
+				newFishCounts[idx-1] += count
+			}
+		}
+
+		intSlice = newFishCounts
+	}
+
+	sumFishCounts := 0
+
+	for _, val := range intSlice {
+		sumFishCounts += val
+	}
+
+	return sumFishCounts
+}
+
+func stringSliceToIntSlice(strSlice []string) []int {
+	intSlice := make([]int, 9)
+
+	for _, val := range strSlice {
+		intValue, _ := strconv.Atoi(string(val))
+		intSlice[intValue] += 1
+	}
+
+	return intSlice
 }
 
 func appendFish(fishSlice []Fish, numFishToAdd int) []Fish {
